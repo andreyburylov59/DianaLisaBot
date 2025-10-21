@@ -1,0 +1,69 @@
+# 🔐 Файлы с секретными данными
+.env
+.env.local
+.env.production
+.env.development
+
+# 🗄️ База данных
+*.db
+*.sqlite
+*.sqlite3
+
+# 📝 Логи
+logs/
+*.log
+
+# 🐍 Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 🧪 Тестирование
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# 🔧 IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 📦 Виртуальные окружения
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# 🖼️ Временные файлы
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# 📊 Резервные копии
+backup_*/
+*.bak
+*.backup
