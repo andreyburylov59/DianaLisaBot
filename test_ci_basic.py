@@ -5,6 +5,12 @@
 
 import sys
 import importlib.util
+import io
+
+# Исправление кодировки для Windows
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 def test_import_module(module_name, file_path):
     """Проверка, что модуль можно импортировать"""

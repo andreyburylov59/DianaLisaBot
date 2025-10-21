@@ -3,9 +3,15 @@
 """
 import asyncio
 import sys
+import io
 from unittest.mock import AsyncMock, MagicMock, patch
 from telegram import Update, User, Chat, Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
+
+# Исправление кодировки для Windows
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 # Импортируем модули бота
 from callbacks import CallbackHandlers

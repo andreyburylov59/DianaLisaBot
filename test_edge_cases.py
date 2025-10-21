@@ -3,9 +3,15 @@
 """
 import asyncio
 import sys
+import io
 from unittest.mock import Mock, AsyncMock, MagicMock
 from callbacks import CallbackHandlers
 from database import db
+
+# Исправление кодировки для Windows
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 class EdgeCasesTester:
     def __init__(self):
