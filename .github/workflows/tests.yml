@@ -31,7 +31,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
-    # Шаг 4: Запустить базовые CI/CD тесты
+    # Шаг 4: Создать тестовый .env файл
+    - name: 🔐 Создать тестовый .env
+      run: |
+        python -c "with open('.env', 'w', encoding='utf-8') as f: f.write('BOT_TOKEN=test_token_for_ci_cd\nADMIN_IDS=123456789\nDATABASE_PATH=test_bot.db\n')"
+    
+    # Шаг 5: Запустить базовые CI/CD тесты
     - name: ✅ Базовые тесты (синтаксис, импорты, структура)
       run: python test_ci_basic.py
       continue-on-error: false
