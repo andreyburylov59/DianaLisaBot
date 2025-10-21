@@ -51,7 +51,7 @@ jobs:
     # Шаг 7: Проверить импорты и синтаксис
     - name: ✅ Проверка синтаксиса
       run: |
-        python -m py_compile bot.py
+        python -m py_compile main.py
         python -m py_compile callbacks.py
         python -m py_compile database.py
         python -m py_compile keyboards.py
