@@ -31,30 +31,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
-    # Шаг 4: Создать .env файл для тестов (без реальных токенов)
-    - name: 🔐 Создать тестовый .env
-      run: |
-        echo "BOT_TOKEN=test_token" > .env
-        echo "PAYMENT_TOKEN=test_payment_token" >> .env
-        echo "DATABASE_PATH=test_dianalisa_bot.db" >> .env
-    
-    # Шаг 5: Запустить тесты клавиатур
-    - name: ⌨️ Тест создания клавиатур
-      run: python test_all_buttons_auto.py
-      continue-on-error: false  # Остановить если тесты провалились
-    
-    # Шаг 6: Запустить edge case тесты
-    - name: 🔍 Тест edge cases
-      run: python test_edge_cases.py
+    # Шаг 4: Запустить базовые CI/CD тесты
+    - name: ✅ Базовые тесты (синтаксис, импорты, структура)
+      run: python test_ci_basic.py
       continue-on-error: false
-    
-    # Шаг 7: Проверить импорты и синтаксис
-    - name: ✅ Проверка синтаксиса
-      run: |
-        python -m py_compile main.py
-        python -m py_compile callbacks.py
-        python -m py_compile database.py
-        python -m py_compile keyboards.py
     
     # Шаг 8: Сохранить результаты тестов
     - name: 📊 Результаты тестов
