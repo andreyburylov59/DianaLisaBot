@@ -10,7 +10,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # 🤖 Основные настройки бота
-BOT_TOKEN = os.getenv('BOT_TOKEN', '8470739086:AAE0od-IRnEmzBF_8RMFOJqUNsvUYKlgnZM')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+if not BOT_TOKEN:
+    # В режиме тестирования используем тестовый токен
+    import sys
+    if 'test' in sys.argv[0].lower() or 'pytest' in sys.modules:
+        BOT_TOKEN = 'test_token_for_testing_only'
+    else:
+        raise ValueError("❌ BOT_TOKEN не найден! Добавьте его в файл .env")
 BOT_USERNAME = os.getenv('BOT_USERNAME', 'DianaLisaBot')
 
 # 👤 Админские настройки
