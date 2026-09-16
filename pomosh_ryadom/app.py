@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, flash, redirect, url_for, request
 from flask_login import LoginManager, current_user
 from config import Config
-from models import db, User, Task, Payment
+from models import db, User, Task, Payment, Review
 
 # Создание экземпляра Flask-приложения
 app = Flask(__name__)
@@ -32,6 +32,10 @@ app.register_blueprint(tasks_blueprint)
 # Регистрация Blueprint для платежей
 from payment import payment as payment_blueprint
 app.register_blueprint(payment_blueprint)
+
+# Регистрация Blueprint для отзывов
+from reviews import reviews as reviews_blueprint
+app.register_blueprint(reviews_blueprint)
 
 
 @login_manager.user_loader

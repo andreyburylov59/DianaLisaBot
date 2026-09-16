@@ -292,6 +292,10 @@
                     ✏️ Редактировать
                 </a>
                 
+                <button type="button" class="btn btn-primary btn-action" onclick="showCompleteModal()">
+                    ✓ Завершить задание
+                </button>
+                
                 <form method="POST" action="{{ url_for('tasks.cancel_task', task_id=task.id) }}" style="flex: 1; min-width: 150px;">
                     <button type="submit" class="btn btn-warning btn-action" onclick="return confirm('Отменить задание?')">
                         ⏸️ Отменить
@@ -312,5 +316,52 @@
             {% endif %}
         </div>
     {% endif %}
+    
+    {% if task.status == 'completed' and current_user.is_authenticated %}
+        {% if task.can_review(current_user.id) %}
+            <div class="contact-section">
+                <h2 class="contact-title">⭐ Оставить отзыв</h2>
+                <p style="margin-bottom: var(--spacing-md);">
+                    Задание выполнено! Оцените работу 
+                    {% if current_user.id == task.user_id %}исполнителя{% else %}заказчика{% endif %}.
+                </p>
+                <a href="{{ url_for('reviews.leave_review', task_id=task.id) }}" class="btn btn-primary" style="width: 100%;">
+                    ⭐ Оставить отзыв
+                </a>
+            </div>
+        {% endif %}
+    {% endif %}
+    
+    <!-- Модальное окно завершения задания -->
+    <div id="completeModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background-color: var(--bg); border-radius: var(--button-radius); padding: var(--spacing-lg); max-width: 500px; margin: var(--spacing-md);">
+            <h2 style="margin-bottom: var(--spacing-md);">Завершить задание</h2>
+            <p style="margin-bottom: var(--spacing-md);">Укажите ID исполнителя, который выполнил задание:</p>
+            <form method="POST" action="{{ url_for('reviews.complete_task', task_id=task.id) }}">
+                <input type="number" name="executor_id" placeholder="ID исполнителя" required style="width: 100%; padding: var(--spacing-sm); margin-bottom: var(--spacing-md); border: 2px solid var(--border); border-radius: 8px; font-size: 16px;">
+                <div style="display: flex; gap: var(--spacing-sm);">
+                    <button type="button" onclick="hideCompleteModal()" class="btn btn-secondary" style="flex: 1;">Отмена</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">✓ Завершить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        function showCompleteModal() {
+            document.getElementById('completeModal').style.display = 'flex';
+        }
+        
+        function hideCompleteModal() {
+            document.getElementById('completeModal').style.display = 'none';
+        }
+        
+        // Закрытие модального окна при клике вне его
+        document.getElementById('completeModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideCompleteModal();
+            }
+        });
+    </script>
 </div>
 {% endblock %}

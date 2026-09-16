@@ -42,6 +42,23 @@ class User(UserMixin, db.Model):
             return self.phone[:2] + '****' + self.phone[-2:]
         return '***'
     
+    def update_rating(self):
+        """Обновить средний рейтинг пользователя на основе полученных отзывов"""
+        reviews = Review.query.filter_by(reviewee_id=self.id).all()
+        if reviews:
+            total_rating = sum(review.rating for review in reviews)
+            self.rating = round(total_rating / len(reviews), 1)
+            self.completed_tasks = len(reviews)
+            db.session.commit()
+    
+    def get_reviews_count(self):
+        """Получить количество отзывов"""
+        return Review.query.filter_by(reviewee_id=self.id).count()
+    
+    def get_average_rating(self):
+        """Получить средний рейтинг с одним знаком после запятой"""
+        return round(self.rating, 1)
+    
     def __repr__(self):
         return f'<User {self.name} ({self.phone})>'
 
@@ -87,6 +104,39 @@ class Task(db.Model):
         if self.is_phone_unlocked_for(user_id):
             return self.creator.phone
         return self.phone_hidden
+    
+    def mark_as_completed(self, executor_id):
+        """Отметить задание как выполненное"""
+        self.status = 'completed'
+        self.executor_id = executor_id
+        self.completed_at = datetime.utcnow()
+        db.session.commit()
+    
+    def can_review(self, user_id):
+        """Проверить, может ли пользователь оставить отзыв"""
+        # Проверяем, что задание выполнено
+        if self.status != 'completed':
+            return False
+        
+        # Проверяем, что пользователь участвовал в задании
+        if user_id not in [self.user_id, self.executor_id]:
+            return False
+        
+        # Проверяем, что отзыв еще не оставлен
+        existing_review = Review.query.filter_by(
+            task_id=self.id,
+            reviewer_id=user_id
+        ).first()
+        
+        return existing_review is None
+    
+    def get_reviewee_id(self, reviewer_id):
+        """Получить ID пользователя, которого нужно оценить"""
+        if reviewer_id == self.user_id:
+            return self.executor_id  # Заказчик оценивает исполнителя
+        elif reviewer_id == self.executor_id:
+            return self.user_id  # Исполнитель оценивает заказчика
+        return None
     
     def __repr__(self):
         return f'<Task {self.title} ({self.status})>'
@@ -151,3 +201,25 @@ class Payment(db.Model):
     
     def __repr__(self):
         return f'<Payment {self.id} for Task {self.task_id} ({self.status})>'
+
+
+class Review(db.Model):
+    """Модель отзыва о выполненном задании"""
+    
+    __tablename__ = 'reviews'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), nullable=False, index=True)
+    reviewer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
+    reviewee_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
+    rating = db.Column(db.Integer, nullable=False)  # 1-5 звезд
+    comment = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    
+    # Связи
+    task = db.relationship('Task', backref='reviews', foreign_keys=[task_id])
+    reviewer = db.relationship('User', foreign_keys=[reviewer_id], backref='reviews_given')
+    reviewee = db.relationship('User', foreign_keys=[reviewee_id], backref='reviews_received')
+    
+    def __repr__(self):
+        return f'<Review {self.id} for Task {self.task_id} ({self.rating}★)>'
