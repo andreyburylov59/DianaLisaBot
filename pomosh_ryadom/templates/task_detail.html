@@ -269,13 +269,16 @@
                 <a href="tel:{{ display_phone }}" class="btn btn-call">
                     📞 Позвонить заказчику
                 </a>
+                <p class="phone-unlock-info" style="color: var(--primary-green); margin-top: var(--spacing-sm);">
+                    ✓ Контакт разблокирован
+                </p>
             {% else %}
                 <div class="phone-display phone-hidden">{{ display_phone }}</div>
                 <p class="phone-unlock-info">
                     Для получения полного номера телефона оплатите 50₽ через СБП.
                     После оплаты вы сможете позвонить заказчику.
                 </p>
-                <a href="#" class="btn btn-call">
+                <a href="{{ url_for('payment.pay_for_contact', task_id=task.id) }}" class="btn btn-primary" style="width: 100%;">
                     💰 Оплатить 50₽ и получить контакт
                 </a>
             {% endif %}

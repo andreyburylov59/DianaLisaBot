@@ -106,5 +106,48 @@ class Payment(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
     paid_at = db.Column(db.DateTime, nullable=True)
     
+    def generate_qr_code(self):
+        """Генерация QR-кода для оплаты через СБП"""
+        import qrcode
+        import os
+        from config import Config
+        
+        # Формируем данные для СБП (упрощенный формат)
+        # В реальности нужно использовать официальный формат СБП
+        payment_data = f"SPB|{self.id}|{self.amount}|Разблокировка контакта"
+        
+        # Создаем QR-код
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(payment_data)
+        qr.make(fit=True)
+        
+        # Генерируем изображение
+        img = qr.make_image(fill_color="black", back_color="white")
+        
+        # Сохраняем файл
+        upload_folder = Config.UPLOAD_FOLDER
+        os.makedirs(upload_folder, exist_ok=True)
+        
+        filename = f"qr_payment_{self.id}.png"
+        filepath = os.path.join(upload_folder, filename)
+        img.save(filepath)
+        
+        # Сохраняем путь в БД
+        self.qr_code_path = filename
+        db.session.commit()
+        
+        return filepath
+    
+    def mark_as_paid(self):
+        """Отметить платеж как оплаченный"""
+        self.status = 'paid'
+        self.paid_at = datetime.utcnow()
+        db.session.commit()
+    
     def __repr__(self):
         return f'<Payment {self.id} for Task {self.task_id} ({self.status})>'

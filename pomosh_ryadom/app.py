@@ -29,6 +29,10 @@ app.register_blueprint(auth_blueprint)
 from routes import tasks as tasks_blueprint
 app.register_blueprint(tasks_blueprint)
 
+# Регистрация Blueprint для платежей
+from payment import payment as payment_blueprint
+app.register_blueprint(payment_blueprint)
+
 
 @login_manager.user_loader
 def load_user(user_id):
