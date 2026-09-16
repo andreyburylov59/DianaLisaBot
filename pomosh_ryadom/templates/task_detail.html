@@ -260,6 +260,14 @@
         </div>
     </div>
     
+    {% if current_user.is_authenticated and task.user_id != current_user.id and task.status == 'active' %}
+        <div style="text-align: center; margin-top: var(--spacing-md);">
+            <a href="{{ url_for('moderation.report_task', task_id=task.id) }}" style="color: var(--danger-red); text-decoration: none; font-size: 14px;">
+                🚨 Пожаловаться на задание
+            </a>
+        </div>
+    {% endif %}
+    
     {% if current_user.is_authenticated and current_user.role in ['executor', 'both'] and task.status == 'active' and task.user_id != current_user.id %}
         <div class="contact-section">
             <h2 class="contact-title">📞 Контакты заказчика</h2>

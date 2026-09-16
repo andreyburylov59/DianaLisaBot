@@ -65,6 +65,12 @@ def create_task():
         flash('Только заказчики могут создавать задания', 'warning')
         return redirect(url_for('tasks.tasks_list'))
     
+    # Проверка лимита активных заданий (максимум 5)
+    active_tasks_count = current_user.get_active_tasks_count()
+    if active_tasks_count >= 5:
+        flash('Вы достигли лимита активных заданий (максимум 5). Завершите или отмените существующие задания.', 'warning')
+        return redirect(url_for('tasks.my_tasks'))
+    
     if request.method == 'POST':
         title = request.form.get('title', '').strip()
         description = request.form.get('description', '').strip()
@@ -113,6 +119,26 @@ def create_task():
         if errors:
             for error in errors:
                 flash(error, 'danger')
+            return render_template('create_task.html',
+                                 title=title,
+                                 description=description,
+                                 category=category,
+                                 price=price if isinstance(price, str) else '',
+                                 address=address,
+                                 district=district,
+                                 urgency=urgency)
+        
+        # Антиспам: проверка на дублирование заданий
+        from datetime import timedelta
+        recent_time = datetime.utcnow() - timedelta(hours=1)
+        similar_task = Task.query.filter(
+            Task.user_id == current_user.id,
+            Task.title == title,
+            Task.created_at >= recent_time
+        ).first()
+        
+        if similar_task:
+            flash('Вы уже создали похожее задание в течение последнего часа. Пожалуйста, подождите.', 'warning')
             return render_template('create_task.html',
                                  title=title,
                                  description=description,

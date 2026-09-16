@@ -242,6 +242,14 @@
                 <div class="stat-label">Верификация</div>
             </div>
         </div>
+        
+        {% if current_user.is_authenticated and current_user.id != user.id %}
+            <div style="margin-top: var(--spacing-md);">
+                <a href="{{ url_for('moderation.report_user', user_id=user.id) }}" class="btn btn-danger" style="background-color: transparent; color: var(--danger-red); border: 2px solid var(--danger-red);">
+                    🚨 Пожаловаться на пользователя
+                </a>
+            </div>
+        {% endif %}
     </div>
     
     {% if total_reviews > 0 %}

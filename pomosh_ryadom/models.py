@@ -21,6 +21,9 @@ class User(UserMixin, db.Model):
     rating = db.Column(db.Float, default=5.0)
     completed_tasks = db.Column(db.Integer, default=0)
     is_verified = db.Column(db.Boolean, default=False)
+    is_blocked = db.Column(db.Boolean, default=False)
+    blocked_reason = db.Column(db.String(255), nullable=True)
+    blocked_at = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Связи
@@ -58,6 +61,28 @@ class User(UserMixin, db.Model):
     def get_average_rating(self):
         """Получить средний рейтинг с одним знаком после запятой"""
         return round(self.rating, 1)
+    
+    def get_reports_count(self):
+        """Получить количество жалоб на пользователя"""
+        return Report.query.filter_by(reported_user_id=self.id, status='pending').count()
+    
+    def block_user(self, reason='Множественные жалобы'):
+        """Заблокировать пользователя"""
+        self.is_blocked = True
+        self.blocked_reason = reason
+        self.blocked_at = datetime.utcnow()
+        db.session.commit()
+    
+    def unblock_user(self):
+        """Разблокировать пользователя"""
+        self.is_blocked = False
+        self.blocked_reason = None
+        self.blocked_at = None
+        db.session.commit()
+    
+    def get_active_tasks_count(self):
+        """Получить количество активных заданий пользователя"""
+        return Task.query.filter_by(user_id=self.id, status='active').count()
     
     def __repr__(self):
         return f'<User {self.name} ({self.phone})>'
@@ -223,3 +248,27 @@ class Review(db.Model):
     
     def __repr__(self):
         return f'<Review {self.id} for Task {self.task_id} ({self.rating}★)>'
+
+
+class Report(db.Model):
+    """Модель жалобы на пользователя или задание"""
+    
+    __tablename__ = 'reports'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    reporter_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
+    reported_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True, index=True)
+    reported_task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), nullable=True, index=True)
+    reason = db.Column(db.String(50), nullable=False)  # spam, fraud, inappropriate, other
+    description = db.Column(db.Text, nullable=True)
+    status = db.Column(db.String(20), nullable=False, default='pending')  # pending, reviewed, resolved
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    reviewed_at = db.Column(db.DateTime, nullable=True)
+    
+    # Связи
+    reporter = db.relationship('User', foreign_keys=[reporter_id], backref='reports_made')
+    reported_user = db.relationship('User', foreign_keys=[reported_user_id], backref='reports_received')
+    reported_task = db.relationship('Task', foreign_keys=[reported_task_id], backref='reports')
+    
+    def __repr__(self):
+        return f'<Report {self.id} ({self.reason}) - {self.status}>'
