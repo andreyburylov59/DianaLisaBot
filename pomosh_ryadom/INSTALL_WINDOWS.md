@@ -52,7 +52,7 @@ rename DianaLisaBot PomoshRyadom
 cd PomoshRyadom\pomosh_ryadom
 ```
 
-Теперь ваш проект находится в `E:\Cursor\PomoshRyadom\pomosh_ryadom\`
+Теперь ваш проект находится в `E:\Cursor\PomoshRyadom\`
 
 ---
 
@@ -72,7 +72,7 @@ cd PomoshRyadom\pomosh_ryadom
 3. Переименуйте папку в `PomoshRyadom`
 4. Зайдите в папку `PomoshRyadom\pomosh_ryadom`
 
-Теперь ваш проект находится в `E:\Cursor\PomoshRyadom\pomosh_ryadom\`
+Теперь ваш проект находится в `E:\Cursor\PomoshRyadom\`
 
 ---
 
@@ -82,7 +82,7 @@ cd PomoshRyadom\pomosh_ryadom
 
 ```cmd
 E:
-cd E:\Cursor\PomoshRyadom\pomosh_ryadom
+cd E:\Cursor\PomoshRyadom
 ```
 
 ### Шаг 2: Создайте виртуальное окружение (рекомендуется)
@@ -199,7 +199,7 @@ pip install --upgrade -r requirements.txt
 После установки у вас будет:
 
 ```
-E:\Cursor\PomoshRyadom\pomosh_ryadom\
+E:\Cursor\PomoshRyadom\
 │
 ├── venv\                    # Виртуальное окружение (создается)
 ├── instance\                # База данных SQLite (создается автоматически)
@@ -301,7 +301,7 @@ python app.py
 
 ```cmd
 E:
-cd E:\Cursor\PomoshRyadom\pomosh_ryadom
+cd E:\Cursor\PomoshRyadom
 venv\Scripts\activate
 python app.py
 ```
@@ -318,13 +318,13 @@ python app.py
 
 Откройте файл:
 ```
-E:\Cursor\PomoshRyadom\pomosh_ryadom\presentation.html
+E:\Cursor\PomoshRyadom\presentation.html
 ```
 
 ### Способ 2: Через HTTP сервер
 
 ```cmd
-cd E:\Cursor\PomoshRyadom\pomosh_ryadom
+cd E:\Cursor\PomoshRyadom
 python -m http.server 8000
 ```
 

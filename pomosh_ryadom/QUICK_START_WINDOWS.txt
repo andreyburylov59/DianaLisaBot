@@ -33,7 +33,7 @@ cd pomosh_ryadom
 
 4. Переименуйте папку в "PomoshRyadom"
 
-5. Зайдите в E:\Cursor\PomoshRyadom\pomosh_ryadom\
+5. Зайдите в E:\Cursor\PomoshRyadom\
 
 
 ═══════════════════════════════════════════════════════════════════
@@ -59,7 +59,7 @@ python --version
   ШАГ 3: УСТАНОВИТЬ ПРОЕКТ
 ═══════════════════════════════════════════════════════════════════
 
-1. Откройте папку: E:\Cursor\PomoshRyadom\pomosh_ryadom\
+1. Откройте папку: E:\Cursor\PomoshRyadom\
 
 2. Найдите файл: install.bat
 
@@ -74,7 +74,7 @@ python --version
   ШАГ 4: ЗАПУСТИТЬ ПРИЛОЖЕНИЕ
 ═══════════════════════════════════════════════════════════════════
 
-1. В папке E:\Cursor\PomoshRyadom\pomosh_ryadom\
+1. В папке E:\Cursor\PomoshRyadom\
 
 2. Найдите файл: start.bat
 
@@ -93,7 +93,7 @@ python --version
   ШАГ 5: ПОСМОТРЕТЬ ПРЕЗЕНТАЦИЮ (опционально)
 ═══════════════════════════════════════════════════════════════════
 
-1. В папке E:\Cursor\PomoshRyadom\pomosh_ryadom\
+1. В папке E:\Cursor\PomoshRyadom\
 
 2. Найдите файл: presentation.bat
 

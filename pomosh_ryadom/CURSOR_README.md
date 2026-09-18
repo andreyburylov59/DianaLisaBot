@@ -12,7 +12,7 @@
 
 3. Перейдите в папку:
    ```
-   E:\Cursor\PomoshRyadom\pomosh_ryadom
+   E:\Cursor\PomoshRyadom
    ```
 
 4. Нажмите **"Select Folder"**
@@ -245,7 +245,7 @@ Cursor AI:
 ## 🗂️ СТРУКТУРА ПРОЕКТА (ДЛЯ ПОНИМАНИЯ)
 
 ```
-E:\Cursor\PomoshRyadom\pomosh_ryadom\
+E:\Cursor\PomoshRyadom\
 │
 ├── 📁 venv\                    # Виртуальное окружение
 │
@@ -421,7 +421,7 @@ Cursor AI:
 
 ## ✅ ЧЕКЛИСТ ПЕРВОГО ЗАПУСКА
 
-- [ ] Открыли проект в Cursor (`E:\Cursor\PomoshRyadom\pomosh_ryadom`)
+- [ ] Открыли проект в Cursor (`E:\Cursor\PomoshRyadom`)
 - [ ] Cursor прочитал `.cursorrules`
 - [ ] Активировали venv: `venv\Scripts\activate`
 - [ ] Установили зависимости: `pip install -r requirements.txt`

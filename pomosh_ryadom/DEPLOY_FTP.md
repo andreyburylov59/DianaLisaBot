@@ -204,7 +204,7 @@ sudo chown -R pomosh:pomosh /var/www/pomosh_ryadom
    - Пароль: ваш пароль
 
 3. **Загрузите файлы:**
-   - Локальная папка: `E:\Cursor\PomoshRyadom\pomosh_ryadom\`
+   - Локальная папка: `E:\Cursor\PomoshRyadom\`
    - Удаленная папка: `/var/www/pomosh_ryadom/`
    
 4. **НЕ загружайте:**
